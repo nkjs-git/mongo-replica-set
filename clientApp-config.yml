@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ns1
+  name: myapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      name: myapp
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: myapp
+        image: naveen19/patients-enrollment-service
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGODB_ADMINUSERNAME
+          value: nkjs
+        - name: MONGODB_ADMINPASSWORD
+          value: naveen080
+        - name: MONGODB_SERVER
+          value: "mongo"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ns1
+  name: myapp
+spec:
+  selector:
+    app: myapp
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: LoadBalancer

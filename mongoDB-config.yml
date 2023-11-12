@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: ns1
+  name: mongo
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  serviceName: "mongo"
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo
+        ports:
+          - containerPort: 27017
+        command:
+        - mongod
+        - "--bind_ip_all"
+        - "--replSet"
+        - rs0
+        env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+            value: nkjs
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            value: naveen080
+        volumeMounts:
+          - name: mongops
+            mountPath: /data/db
+  volumeClaimTemplates:
+  - metadata:
+      name: mongops
+      annotations:
+        volume.beta.kubernetes.io/storage-class: azureblob-nfs-premium
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      storageClassName: my-blobstorage
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ns1
+  name: mongo
+spec:
+  ports:
+    - port: 27017
+      targetPort: 27017
+  clusterIP: None
+  selector:
+    app: mongo
