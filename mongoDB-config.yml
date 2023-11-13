@@ -26,9 +26,9 @@ spec:
         - rs0
         env:
           - name: MONGO_INITDB_ROOT_USERNAME
-            value: nkjs
+            value: <your-username>
           - name: MONGO_INITDB_ROOT_PASSWORD
-            value: naveen080
+            value: <your-password>
         volumeMounts:
           - name: mongops
             mountPath: /data/db
