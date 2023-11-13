@@ -21,9 +21,9 @@ spec:
         - containerPort: 8080
         env:
         - name: MONGODB_ADMINUSERNAME
-          value: nkjs
+          value: <your-username>
         - name: MONGODB_ADMINPASSWORD
-          value: naveen080
+          value: <your-password>
         - name: MONGODB_SERVER
           value: "mongo"
 ---
